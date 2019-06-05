@@ -45,7 +45,8 @@ public enum ExceptionEnum {
     NULL_LIST(404,"未查询到数据"),
     LIST_THROW(100,"数据异常"),
     REGISTER_CODE_FILE(400,"发送验证码失败"),
-    OLDPWDNO(100,"旧密码错误")
+    OLDPWDNO(100,"旧密码错误"),
+    MONEY_IS_NOT_ENOUGH(444,"余额不足,无法冻结")
     ;
     private int code;
     private String msg;

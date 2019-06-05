@@ -78,8 +78,19 @@ public class UsersService{
      * @param users users对象
      */
     public void updateUsers(Users users) {
-        users.setUpdateTime(new Date());
-        int count = this.usersmapper.updateByPrimaryKeySelective(users);
+        Users users1=this.usersmapper.selectByPrimaryKey(users.getId());
+        if(users1.getMoney().compareTo(users.getFreezeMoney())==-1){
+            throw new CommonException(ExceptionEnum.MONEY_IS_NOT_ENOUGH);
+        }
+        if(users.getFreezeMoney()!=null){
+            System.out.println(users);
+            users1.setMoney(users1.getMoney().subtract(users.getFreezeMoney()));
+            users1.setFreezeMoney(users1.getFreezeMoney().add(users.getFreezeMoney()));
+
+
+        }
+        users1.setUpdateTime(new Date());
+        int count = this.usersmapper.updateByPrimaryKeySelective(users1);
         if(count != 1){
              throw new CommonException(ExceptionEnum.UPDATE_FAILURE);
         }
@@ -172,14 +183,14 @@ public class UsersService{
         return user;
     }
 
-    public void getForgetCode(String userPhone) {
+    public void getForgetCode(String userPhone,Integer type) {
         if (StringUtils.isEmpty(userPhone)) {
             throw new CommonException(ExceptionEnum.PHONE_NUMBER_BE_NULL);
         }
         //查询是否有此用户
         Users user=this.checkPhone(userPhone);
         //没有去注册
-        if (user == null) {
+        if (user == null&& type!=null) {
             throw new CommonException(ExceptionEnum.USER_IS_NOT_FOUND);
         }
         String random= RandomUtils.Random();//获取随机数
@@ -211,7 +222,7 @@ public class UsersService{
     }
 
     /**
-     * 修改密码
+     * 修改登录密码
      * @param id
      * @param oldpwd
      * @param newpwd
@@ -230,6 +241,27 @@ public class UsersService{
             throw new CommonException(ExceptionEnum.OLDPWDNO);
         }
     }
+
+    /**
+     * 修改支付密码
+     * @param id
+     * @param oldpwd
+     * @param newpwd
+     */
+    public void updatePayPwd(Integer id, String oldpwd, String newpwd) {
+        Users user = usersmapper.selectByPrimaryKey(id);
+        if (user.getPayPwd().equals(oldpwd)){
+            Users user1 = new Users();
+            user1.setId(id);
+            user1.setPayPwd(newpwd);
+            int i = usersmapper.updateByPrimaryKeySelective(user1);
+            if (i<1){
+                throw new CommonException(ExceptionEnum.PARAMETER_CAN_NOT_BE_EMPTY);
+            }
+        }else {
+            throw new CommonException(ExceptionEnum.OLDPWDNO);
+        }
+    }
     /**
      * 根据用户主键获取剩余金额
      *
@@ -238,10 +270,19 @@ public class UsersService{
      */
     public BigDecimal getUserMoney(Integer id) {
         System.out.println(id);
-            Users user=this.usersmapper.selectByPrimaryKey(id);
-            if (user == null) {
-                throw new CommonException(ExceptionEnum.USER_IS_NOT_FOUND);
-            }
-            return user.getMoney();
+        Users user=this.usersmapper.selectByPrimaryKey(id);
+        if (user == null) {
+            throw new CommonException(ExceptionEnum.USER_IS_NOT_FOUND);
         }
+        return user.getMoney();
     }
+
+    public BigDecimal getfreezeMoney(Integer id) {
+        System.out.println(id);
+        Users user=this.usersmapper.selectByPrimaryKey(id);
+        if (user == null) {
+            throw new CommonException(ExceptionEnum.USER_IS_NOT_FOUND);
+        }
+        return user.getFreezeMoney();
+    }
+}

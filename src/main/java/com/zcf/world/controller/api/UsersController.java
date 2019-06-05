@@ -99,12 +99,12 @@ public class UsersController {
     }
 
     @PostMapping("forgetCode")
-    @ApiOperation(value = "获取忘记密码时的验证码", notes = "手机号必填")
+    @ApiOperation(value = "验证码", notes = "手机号必填")
     @ApiImplicitParams(value = {
             @ApiImplicitParam(name = "userPhone", value = "用户的手机号", required = true, dataType = "String")
     })
-    public ResponseEntity<Void> getForgetCode(String userPhone) {
-        this.usersService.getForgetCode(userPhone);
+    public ResponseEntity<Void> getForgetCode(String userPhone,Integer type) {
+        this.usersService.getForgetCode(userPhone,type);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
@@ -121,18 +121,30 @@ public class UsersController {
         this.usersService.updateUserPasswords(realName, userPhone,loginPwd);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
-    @ApiOperation(value = "修改密码(旧新)")
+    @ApiOperation(value = "修改登录密码(旧新)")
     @PostMapping (value = "updateOldNew", produces = {"application/json;charset=UTF-8"})
     public void updateOldNew(Integer id, String oldpwd, String newpwd) {
         usersService.updateOldNew(id, oldpwd, newpwd);
     }
-
+    @ApiOperation(value = "修改支付密码(旧新)")
+    @PostMapping (value = "updatePayPwd", produces = {"application/json;charset=UTF-8"})
+    public void updatePayPwd(Integer id, String oldpwd, String newpwd) {
+        usersService.updatePayPwd(id, oldpwd, newpwd);
+    }
     @ApiOperation(value = "获取用户的账户余额")
     @PostMapping (value = "/money/{id}", produces = {"application/json;charset=UTF-8"})
     @ApiImplicitParam(name = "id", value = "主键", dataType = "Integer")
     public ResponseEntity<BigDecimal> getUsersMoney(@PathVariable Integer id) {
         return ResponseEntity.ok(this.usersService.getUserMoney(id));
     }
+    @ApiOperation(value = "获取用户的冻结资金")
+    @PostMapping (value = "/freezeMoney/{id}", produces = {"application/json;charset=UTF-8"})
+    @ApiImplicitParam(name = "id", value = "主键", dataType = "Integer")
+    public ResponseEntity<BigDecimal> getFreezeMoney(@PathVariable Integer id) {
+        return ResponseEntity.ok(this.usersService.getfreezeMoney(id));
+    }
+
+
 
 
 }

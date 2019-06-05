@@ -43,6 +43,8 @@ public enum ExceptionEnum {
     DATA_DOES_NOT_EXIST(404,"没有查询到该数据"),
     THE_DEFAULT_ADDRESS_DOES_NOT_EXIST(404,"默认地址不存在"),
     NULL_LIST(404,"未查询到数据"),
+    PAYPWD_IS_NOT_TRUE(555,"支付密码不正确"),
+    BANK_IS_USED(555,"银行卡已绑定"),
     LIST_THROW(100,"数据异常"),
     REGISTER_CODE_FILE(400,"发送验证码失败"),
     OLDPWDNO(100,"旧密码错误"),

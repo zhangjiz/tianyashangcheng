@@ -80,17 +80,20 @@ public class ItemController {
         return ResponseEntity.ok(this.itemService.getItem(id));
     }
 
-    @ApiOperation(value = "获取所有")
-    @GetMapping(produces = {"application/json;charset=UTF-8"})
-    public  ResponseEntity<List<Item>> getAllItem() {
-       return ResponseEntity.ok(this.itemService.getAllItem());
-    }
-
     @ApiOperation(value = "根据关键字模糊查询商品")
     @GetMapping(value = "itemTitle", produces = {"application/json;charset=UTF-8"})
-    @ApiImplicitParams(value = {@ApiImplicitParam(name = "itemTitle", value = "商品标题", dataType = "String"),
+    @ApiImplicitParams(value = {
+            @ApiImplicitParam(name = "userid", value = "用户id", dataType = "Integer"),
+            @ApiImplicitParam(name = "itemTitle", value = "商品标题", dataType = "String"),
     })
-    public ResponseEntity<List<Item>> getitem(String itemTitle) {
-        return ResponseEntity.ok(this.itemService.getitem(itemTitle));
+    public ResponseEntity<List<Item>> getitem(Integer userid,String itemTitle) {
+        return ResponseEntity.ok(this.itemService.getitem(userid,itemTitle));
+    }
+
+    @ApiOperation(value = "根据用户id获取首页查询历史")
+    @GetMapping(value = "searchHistory", produces = {"application/json;charset=UTF-8"})
+    @ApiImplicitParam(name = "userid", value = "用户id", dataType = "Integer")
+    public ResponseEntity<List<Item>> searchHistory(Integer userid) {
+        return ResponseEntity.ok(this.itemService.searchHistory(userid));
     }
 }

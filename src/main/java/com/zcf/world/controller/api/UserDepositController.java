@@ -53,8 +53,8 @@ public class UserDepositController {
             @ApiImplicitParam(name = "id", value = "提现记录id", dataType = "Integer"),
             @ApiImplicitParam(name = "userid", value = "用户id", dataType = "Integer"),
     })
-    public  ResponseEntity<List<UserDeposit>> getAllUserDeposit(Integer id,Integer userid) {
-       return ResponseEntity.ok(this.userDepositService.getAllUserDeposit(id,userid));
+    public  ResponseEntity<List<UserDeposit>> getAllUserDeposit(Integer id,Integer usersid) {
+       return ResponseEntity.ok(this.userDepositService.getAllUserDeposit(id,usersid));
     }
 
     @PostMapping("getSms")

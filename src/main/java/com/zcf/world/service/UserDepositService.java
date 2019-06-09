@@ -78,11 +78,11 @@ public class UserDepositService {
      *
      * @return UserDeposit对象集合
      */
-    public List<UserDeposit> getAllUserDeposit(Integer id, Integer userid) {
+    public List<UserDeposit> getAllUserDeposit(Integer id, Integer usersid) {
         Example example = new Example(UserDeposit.class);
         Example.Criteria criteria = example.createCriteria();
-        if (userid != null) {
-            criteria.andEqualTo("userid", userid);
+        if (usersid != null) {
+            criteria.andEqualTo("usersid", usersid);
         }
         if (id != null) {
             criteria.andEqualTo("id", id);
